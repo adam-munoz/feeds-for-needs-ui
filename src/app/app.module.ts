@@ -8,11 +8,13 @@ import { FeedingPlanComponent } from './feeding-plan/feeding-plan.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MaterialModule } from './material/material.module';
+import { NotAvailableComponent } from './not-available/not-available.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FeedingPlanComponent
+    FeedingPlanComponent,
+    NotAvailableComponent
   ],
   imports: [
     BrowserModule,
