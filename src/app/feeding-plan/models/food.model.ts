@@ -1,5 +1,5 @@
 export enum ServingSizeMeasurement {
-    'cup' = 'cup',
+    'cups' = 'cups',
     'grams' = 'grams',
     'teaspoons' = 'teaspoons',
     'tablespoons' = 'tablespoons',
@@ -7,14 +7,17 @@ export enum ServingSizeMeasurement {
 }
 
 export interface Food {
-    name: string;
-    description: string;
-    servingSize: number;
-    servingSizeMeasurement: ServingSizeMeasurement;
-    numberOfServings: number;
-    caloriesPerServing: number;
-    gramsProteinPerServing: number;
-    gramsCarbsPerServing: number;
-    gramsFatPerServing: number;
+    name?: string;
+    description?: string;
+    servingSize?: string;
+    numberOfServings?: number;
+    caloriesPerServing?: number;
+    gramsProteinPerServing?: number;
+    gramsCarbsPerServing?: number;
+    gramsFatPerServing?: number;
+    calories?: number;
+    carbs?: number;
+    fat?: number;
+    protein?: number;
 
 }

@@ -9,18 +9,24 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MaterialModule } from './material/material.module';
 import { NotAvailableComponent } from './not-available/not-available.component';
-
+import { ReactiveFormsModule } from '@angular/forms';
+import { DigitsOnlyDirective } from './shared/digits-only/digits-only.directive';
+import { DecimalDigitsOnlyDirective } from './shared/decimal-digits-only/decimal-digits-only.directive';
 @NgModule({
   declarations: [
     AppComponent,
     FeedingPlanComponent,
-    NotAvailableComponent
+    NotAvailableComponent,
+    DigitsOnlyDirective,
+    DecimalDigitsOnlyDirective,
+    DigitsOnlyDirective
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
