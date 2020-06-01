@@ -1,1 +1,143 @@
-<p>feeding-plan works!</p>
+<mat-grid-list cols="6" rowHeight="5em">
+    <mat-grid-tile [colspan]="6" [rowspan]="1">
+        <div class="mat-title total-macros">
+            {{mealPlanForm.get('calories').value}} cal | {{mealPlanForm.get('fat').value}}g fat |
+            {{mealPlanForm.get('carbs').value}}g carbs | {{mealPlanForm.get('protein').value}}g protein
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
+<mat-grid-list cols="6" rowHeight="4em">
+    <mat-grid-tile [colspan]="5" [rowspan]="1">
+        &nbsp;
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <div class="add-meal-container">
+            <button mat-button color="primary" class="add-meal" (click)="addMeal()">Add Meal</button>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
+
+<form [formGroup]="mealPlanForm">
+    <div formArrayName="meals">
+        <mat-accordion multi *ngFor="let meal of mealPlanForm.get('meals')['controls']; let mealIndex = index;">
+            <div [formGroupName]="mealIndex">
+                <mat-expansion-panel [expanded]="true" class="meal-container">
+                    <mat-expansion-panel-header class="meal-header">
+                        <mat-panel-title>
+                            <mat-form-field>
+                                <mat-label>Meal</mat-label>
+                                <input matInput formControlName="name">
+                            </mat-form-field>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{meal.get('calories').value}} cal | {{meal.get('fat').value}}g fat |
+                            {{meal.get('carbs').value}}g carbs | {{meal.get('protein').value}}g protein
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <table mat-table #foodTable [dataSource]="meal.get('foods').controls" formArrayName="foods">
+                        <!-- Row definitions -->
+                        <tr mat-header-row *matHeaderRowDef="foodColumns"></tr>
+                        <tr mat-row *matRowDef="let row; let i = index; columns: foodColumns;"></tr>
+
+                        <!-- Column definitions -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef> Name </th>
+                            <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                <mat-form-field>
+                                    <input matInput formControlName="name" maxLength="65">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="servingSize">
+                            <th mat-header-cell *matHeaderCellDef> Serving size </th>
+                            <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                <mat-form-field>
+                                    <input matInput formControlName="servingSize" maxLength="25" (blur)="calculate()">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="caloriesPerServing">
+                            <th mat-header-cell *matHeaderCellDef> Calories per serving </th>
+                            <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                <mat-form-field>
+                                    <input matInput formControlName="caloriesPerServing" maxLength="5"
+                                        (blur)="calculate()">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gramsFatPerServing">
+                            <th mat-header-cell *matHeaderCellDef> Fat per serving (g)</th>
+                            <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                <mat-form-field>
+                                    <input matInput formControlName="gramsFatPerServing" maxLength="5"
+                                        (blur)="calculate()">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gramsCarbsPerServing">
+                            <th mat-header-cell *matHeaderCellDef> Carbs per serving (g)</th>
+                            <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                <mat-form-field>
+                                    <input matInput formControlName="gramsCarbsPerServing" maxLength="5"
+                                        (blur)="calculate()">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gramsProteinPerServing">
+                            <th mat-header-cell *matHeaderCellDef> Protein per serving (g)</th>
+                            <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                <mat-form-field>
+                                    <input matInput formControlName="gramsProteinPerServing" maxLength="5"
+                                        (blur)="calculate()">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="numberOfServings">
+                            <th mat-header-cell *matHeaderCellDef>Servings</th>
+                            <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                <mat-form-field>
+                                    <input matInput formControlName="numberOfServings" maxLength="5"
+                                        (blur)="calculate()">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="calories">
+                            <th mat-header-cell *matHeaderCellDef>Total calories | fat | carbs | protein</th>
+                            <td mat-cell *matCellDef="let row; let index = index">
+                                {{meal.get('foods')['controls'][index].controls.calories.value}} cal |
+                                {{meal.get('foods')['controls'][index].controls.fat.value}}g |
+                                {{meal.get('foods')['controls'][index].controls.carbs.value}}g |
+                                {{meal.get('foods')['controls'][index].controls.protein.value}}g
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let row; let index = index">
+                                <div class="actions-container">
+                                    <button mat-mini-fab color="primary" aria-label="add food">
+                                        <mat-icon (click)="addFood(meal)">add</mat-icon>
+                                    </button>
+                                    <button mat-mini-fab color="warn" aria-label="delete food">
+                                        <mat-icon (click)="deleteFood(meal, index)">delete</mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                    </table>
+                    <mat-action-row>
+                        <button mat-button color="warn" (click)="deleteMeal(mealIndex)">Delete Meal</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+            </div>
+        </mat-accordion>
+    </div>
+</form>
