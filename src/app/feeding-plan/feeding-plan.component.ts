@@ -5,7 +5,7 @@ import { mealPlanFormGroup, foodFormGroup, mealFormGroup } from './feeding-plan.
 import { MatTable } from '@angular/material/table';
 import { Meal } from './models/meal.model';
 import { Food } from './models/food.model';
-import { calculateFoodMacrosByServings } from '../business-service/calculate-macros';
+import { calculateFoodMacrosByServings } from '../business-services/calculate-macros';
 
 @Component({
   selector: 'app-feeding-plan',
